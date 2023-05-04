@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "ir_tools.h": "c",
+        "ir_timings.h": "c",
+        "task.h": "c",
+        "rmt.h": "c",
+        "esp_err.h": "c",
+        "gpio.h": "c",
+        "soc_caps.h": "c",
+        "esp_attr.h": "c",
+        "*.inc": "c",
+        "ratio": "c"
+    },
+    "idf.adapterTargetName": "esp32",
+    "idf.openOcdConfigs": [
+        "board/esp32-wrover-kit-3.3v.cfg"
+    ],
+    "idf.flashType": "UART",
+    "idf.portWin": "COM5"
+}
