@@ -184,6 +184,7 @@ ir_builder_t* ir_builder_rmt_new_samsung(const ir_builder_config_t *config)
     SAMSUNG_CHECK(rmt_get_counter_clock((rmt_channel_t)config->dev_hdl, &counter_clk_hz) == ESP_OK,
               "get rmt counter clock failed", err, NULL);
     float ratio = (float)counter_clk_hz / 1e6;
+    ESP_LOGW("rmt_setup", "ratio = %.6f", ratio);
     samsung_builder->leading_code_high_ticks = (uint32_t)(ratio * SAMSUNG_LEADING_CODE_HIGH_US);
     samsung_builder->leading_code_low_ticks = (uint32_t)(ratio * SAMSUNG_LEADING_CODE_LOW_US);;
     samsung_builder->payload_logic0_high_ticks = (uint32_t)(ratio * SAMSUNG_PAYLOAD_ZERO_HIGH_US);
