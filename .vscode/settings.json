@@ -9,7 +9,8 @@
         "soc_caps.h": "c",
         "esp_attr.h": "c",
         "*.inc": "c",
-        "ratio": "c"
+        "ratio": "c",
+        "*.tcc": "c"
     },
     "idf.adapterTargetName": "esp32",
     "idf.openOcdConfigs": [

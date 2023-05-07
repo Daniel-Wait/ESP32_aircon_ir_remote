@@ -136,12 +136,6 @@ static esp_err_t samsung_build_repeat_frame(ir_builder_t *builder)
 {
     samsung_builder_t *samsung_builder = __containerof(builder, samsung_builder_t, parent);
     samsung_builder->cursor = 0;
-    samsung_builder->buffer[samsung_builder->cursor].level0 = !samsung_builder->inverse;
-    samsung_builder->buffer[samsung_builder->cursor].duration0 = samsung_builder->repeat_code_high_ticks;
-    samsung_builder->buffer[samsung_builder->cursor].level1 = samsung_builder->inverse;
-    samsung_builder->buffer[samsung_builder->cursor].duration1 = samsung_builder->repeat_code_low_ticks;
-    samsung_builder->cursor += 1;
-    samsung_builder_make_end(builder);
     return ESP_OK;
 }
 
@@ -192,7 +186,9 @@ ir_builder_t* ir_builder_rmt_new_samsung(const ir_builder_config_t *config)
     samsung_builder->payload_logic1_high_ticks = (uint32_t)(ratio * SAMSUNG_PAYLOAD_ONE_HIGH_US);
     samsung_builder->payload_logic1_low_ticks = (uint32_t)(ratio * SAMSUNG_PAYLOAD_ONE_LOW_US);
     samsung_builder->ending_code_high_ticks = (uint32_t)(ratio * SAMSUNG_ENDING_CODE_HIGH_US);
-    samsung_builder->ending_code_low_ticks = 0x7FFF;
+    samsung_builder->ending_code_low_ticks = 0x7FFF; // duration fields of rmt_item32_t only take 15 bits (0x7FFF is max)
+    samsung_builder->repeat_code_high_ticks = (uint32_t)(ratio * SAMSUNG_REPEAT_CODE_HIGH_US);
+    samsung_builder->repeat_code_low_ticks = 0x0;
     samsung_builder->parent.make_head = samsung_builder_make_head;
     samsung_builder->parent.make_logic0 = samsung_builder_make_logic0;
     samsung_builder->parent.make_logic1 = samsung_builder_make_logic1;

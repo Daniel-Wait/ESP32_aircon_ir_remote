@@ -59,6 +59,8 @@ static void ir_tx_task(void *arg)
         ESP_ERROR_CHECK(ir_builder->build_frame(ir_builder, addr, cmd));
         ESP_ERROR_CHECK(ir_builder->get_result(ir_builder, &items, &length));
         //To send data according to the waveform items.
+        rmt_write_items(tx_rmt_chan, items, length, true);
+        vTaskDelay(pdMS_TO_TICKS(ir_builder->repeat_period_ms));
         rmt_write_items(tx_rmt_chan, items, length, false);
     }
     ir_builder->del(ir_builder);
