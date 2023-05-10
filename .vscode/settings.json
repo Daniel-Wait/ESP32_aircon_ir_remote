@@ -10,7 +10,8 @@
         "esp_attr.h": "c",
         "*.inc": "c",
         "ratio": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "freertos.h": "c"
     },
     "idf.adapterTargetName": "esp32",
     "idf.openOcdConfigs": [

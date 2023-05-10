@@ -5,6 +5,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/semphr.h"
 
 #include "esp_system.h"
 #include "esp_spi_flash.h"
@@ -21,9 +22,14 @@ static const char *TAG = "aircon";
 
 static rmt_channel_t tx_rmt_chan = RMT_CHANNEL_0;
 
+SemaphoreHandle_t xSemaphore;
+
 static void localTxEndCallback(rmt_channel_t channel, void *arg)
 {
-    ESP_LOGI(TAG, "rmt_tx_cmplt : chan %d", channel);
+    static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+    xSemaphoreGiveFromISR(xSemaphore, &xHigherPriorityTaskWoken);
+    // ESP_LOGI(TAG, "rmt_tx_cmplt : chan %d", channel);
 }
 
 /**
@@ -43,7 +49,7 @@ static void ir_tx_task(void *arg)
     rmt_config(&rmt_tx_config);
     rmt_driver_install(tx_rmt_chan, 0, 0);
 
-    // __unused rmt_tx_end_callback_t previous = rmt_register_tx_end_callback(localTxEndCallback, (void *)0xABCD);
+    __unused rmt_tx_end_callback_t previous = rmt_register_tx_end_callback(localTxEndCallback, (void *)&addr);
     
 
     ir_builder_config_t ir_builder_config = IR_BUILDER_DEFAULT_CONFIG((ir_dev_t)tx_rmt_chan);
@@ -67,7 +73,21 @@ static void ir_tx_task(void *arg)
     rmt_driver_uninstall(tx_rmt_chan);
     vTaskDelete(NULL);
 }
+
+static void debug_print_task(void *arg)
+{
+    while (1)
+    {
+        ESP_LOGI(TAG, "rmt_tx_cmplt");
+        xSemaphoreTake(xSemaphore, portMAX_DELAY);
+    }
+    vTaskDelete(NULL);
+}
+
+
 void app_main(void)
 {
+    xSemaphore = xSemaphoreCreateBinary();
+    xTaskCreate(debug_print_task, "debug_print_task", 2048, NULL, 9, NULL);
     xTaskCreate(ir_tx_task, "ir_tx_task", 2048, NULL, 10, NULL);
 }
