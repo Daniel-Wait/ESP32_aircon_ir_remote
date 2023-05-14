@@ -43,7 +43,8 @@ static void localTxEndCallback(rmt_channel_t channel, void *arg)
 static void ir_tx_task(void *arg)
 {
     uint32_t addr = 0xB24D;
-    uint32_t cmd = (0xBF40 << 16) | 0x00FF;
+    // uint32_t cmd = (0xBF40 << 16) | 0x00FF;
+    uint32_t arr_cmd[2] = {0xdd2207f8, 0xf80721de};
     rmt_item32_t *items = NULL;
     size_t length = 0;
 
@@ -60,7 +61,9 @@ static void ir_tx_task(void *arg)
 
     ir_builder_t* ir_builder = ir_builder_rmt_new_samsung(&ir_builder_config);
 
+    uint8_t cmd_num = 0;
     while (1) {
+        uint32_t cmd = arr_cmd[cmd_num];
         vTaskDelay(pdMS_TO_TICKS(3000));
         ESP_LOGI(TAG, "Send command 0x%x to address 0x%x", cmd, addr);
         vTaskDelay(pdMS_TO_TICKS(500));
@@ -78,6 +81,8 @@ static void ir_tx_task(void *arg)
         taskENABLE_INTERRUPTS();
 #endif
         rmt_write_items(tx_rmt_chan, items, length, false);
+        cmd_num += 1;
+        cmd_num %= 2;
 
         if (0) {break;}
     }
@@ -102,7 +107,7 @@ static void ir_rx_task(void *arg)
     rmt_driver_install(rx_rmt_chan, 1000, 0);
 
     ir_parser_config_t ir_parser_config = IR_PARSER_DEFAULT_CONFIG((ir_dev_t)rx_rmt_chan);
-    // ir_parser_config.margin_us = 200;
+    ir_parser_config.margin_us = 200;
     ir_parser_config.flags |= IR_TOOLS_FLAGS_PROTO_EXT; // Using extended IR protocols
     ir_parser_t *ir_parser = NULL;
     ir_parser = ir_parser_rmt_new_samsung(&ir_parser_config);
@@ -117,11 +122,10 @@ static void ir_rx_task(void *arg)
         items = (rmt_item32_t *) xRingbufferReceive(rb, &length, portMAX_DELAY);
         if (items)
         {
-            // xSemaphoreGive(xSemaphoreRmtRx);
             length /= 4; // one RMT = 4 Bytes
             if (ir_parser->input(ir_parser, items, length) == ESP_OK) 
             {
-                xSemaphoreGive(xSemaphoreRmtRx);
+                // xSemaphoreGive(xSemaphoreRmtRx);
                 if (ir_parser->get_scan_code(ir_parser, &addr, &cmd, &repeat) == ESP_OK)
                 {
                     ESP_LOGI(TAG, "Scan Code %s --- addr: 0x%x cmd: 0x%x", repeat ? "(repeat)" : "", addr, cmd);

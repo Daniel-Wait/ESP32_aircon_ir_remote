@@ -22,7 +22,7 @@ extern "C" {
  * @brief Timings for SAMSUNG protocol
  *
  */
-#define SAMSUNG_LEADING_CODE_HIGH_US    (4500)
+#define SAMSUNG_LEADING_CODE_HIGH_US    (4280)
 #define SAMSUNG_LEADING_CODE_LOW_US     (4500)
 #define SAMSUNG_PAYLOAD_ONE_HIGH_US     (560)
 #define SAMSUNG_PAYLOAD_ONE_LOW_US      (1690)
