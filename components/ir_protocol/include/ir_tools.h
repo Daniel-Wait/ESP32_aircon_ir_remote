@@ -235,11 +235,7 @@ typedef struct {
 
 ir_builder_t* ir_builder_rmt_new_samsung(const ir_builder_config_t *config);
 
-static inline ir_parser_t* ir_parser_rmt_new_samsung(const ir_parser_config_t *config)
-{
-    static ir_parser_t parser_stub = {0};
-    return &parser_stub;
-}
+ir_parser_t* ir_parser_rmt_new_samsung(const ir_parser_config_t *config);
 
 #ifdef __cplusplus
 }

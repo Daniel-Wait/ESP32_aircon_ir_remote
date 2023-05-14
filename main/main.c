@@ -21,15 +21,17 @@
 static const char *TAG = "aircon";
 
 static const rmt_channel_t tx_rmt_chan = RMT_CHANNEL_0;
+static const rmt_channel_t rx_rmt_chan = RMT_CHANNEL_1;
 
-SemaphoreHandle_t xSemaphore;
+SemaphoreHandle_t xSemaphoreRmtTx;
+SemaphoreHandle_t xSemaphoreRmtRx;
+
 
 static void localTxEndCallback(rmt_channel_t channel, void *arg)
 {
     static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-    xSemaphoreGiveFromISR(xSemaphore, &xHigherPriorityTaskWoken);
-    // ESP_LOGI(TAG, "rmt_tx_cmplt : chan %d", channel);
+    xSemaphoreGiveFromISR(xSemaphoreRmtTx, &xHigherPriorityTaskWoken);
 }
 
 /**
@@ -66,9 +68,62 @@ static void ir_tx_task(void *arg)
         //To send data according to the waveform items.
         rmt_write_items(tx_rmt_chan, items, length, true);
         rmt_write_items(tx_rmt_chan, items, length, false);
+
+        if (0) {break;}
     }
     ir_builder->del(ir_builder);
     rmt_driver_uninstall(tx_rmt_chan);
+    vTaskDelete(NULL);
+}
+
+
+static void ir_rx_task(void *arg)
+{
+    uint32_t addr = 0;
+    uint32_t cmd = 0;
+    size_t length = 0;
+    bool repeat = false;
+    RingbufHandle_t rb = NULL;
+    rmt_item32_t *items = NULL;
+
+    rmt_config_t rmt_rx_config = RMT_DEFAULT_CONFIG_RX(GPIO_NUM_5, rx_rmt_chan);
+    rmt_rx_config.rx_config.idle_threshold = 5100;
+    rmt_config(&rmt_rx_config);
+    rmt_driver_install(rx_rmt_chan, 1000, 0);
+
+    ir_parser_config_t ir_parser_config = IR_PARSER_DEFAULT_CONFIG((ir_dev_t)rx_rmt_chan);
+    // ir_parser_config.margin_us = 200;
+    ir_parser_config.flags |= IR_TOOLS_FLAGS_PROTO_EXT; // Using extended IR protocols
+    ir_parser_t *ir_parser = NULL;
+    ir_parser = ir_parser_rmt_new_samsung(&ir_parser_config);
+
+    //get RMT RX ringbuffer
+    rmt_get_ringbuf_handle(rx_rmt_chan, &rb);
+    assert(rb != NULL);
+    // Start receive
+    rmt_rx_start(rx_rmt_chan, true);
+    while (1) 
+    {
+        items = (rmt_item32_t *) xRingbufferReceive(rb, &length, portMAX_DELAY);
+        if (items)
+        {
+            // xSemaphoreGive(xSemaphoreRmtRx);
+            length /= 4; // one RMT = 4 Bytes
+            if (ir_parser->input(ir_parser, items, length) == ESP_OK) 
+            {
+                xSemaphoreGive(xSemaphoreRmtRx);
+                if (ir_parser->get_scan_code(ir_parser, &addr, &cmd, &repeat) == ESP_OK)
+                {
+                    ESP_LOGI(TAG, "Scan Code %s --- addr: 0x%x cmd: 0x%x", repeat ? "(repeat)" : "", addr, cmd);
+                }
+            }
+            //after parsing the data, return spaces to ringbuffer.
+            vRingbufferReturnItem(rb, (void *) items);
+            if (0) {break;}
+        }
+    }
+    ir_parser->del(ir_parser);
+    rmt_driver_uninstall(rx_rmt_chan);
     vTaskDelete(NULL);
 }
 
@@ -76,8 +131,14 @@ static void debug_print_task(void *arg)
 {
     while (1)
     {
-        ESP_LOGI(TAG, "rmt_tx_cmplt");
-        xSemaphoreTake(xSemaphore, portMAX_DELAY);
+        if (xSemaphoreTake(xSemaphoreRmtTx, portMAX_DELAY) == pdTRUE)
+        {
+            ESP_LOGI(TAG, "rmt_tx_cmplt");
+        }
+        if (xSemaphoreTake(xSemaphoreRmtRx, portMAX_DELAY) == pdTRUE)
+        {
+            ESP_LOGI(TAG, "rmt_rx_line_active");
+        }
     }
     vTaskDelete(NULL);
 }
@@ -85,7 +146,9 @@ static void debug_print_task(void *arg)
 
 void app_main(void)
 {
-    xSemaphore = xSemaphoreCreateBinary();
+    xSemaphoreRmtTx = xSemaphoreCreateBinary();
+    xSemaphoreRmtRx = xSemaphoreCreateBinary();
     xTaskCreate(debug_print_task, "debug_print_task", 2048, NULL, 9, NULL);
     xTaskCreate(ir_tx_task, "ir_tx_task", 2048, NULL, 10, NULL);
+    xTaskCreate(ir_rx_task, "ir_rx_task", 2048, NULL, 11, NULL);
 }

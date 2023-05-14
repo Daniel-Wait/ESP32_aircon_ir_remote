@@ -1,0 +1,217 @@
+I (32600) samsung_parser: length = 49
+I (33750) samsung_parser: length = 48
+I (33750) aircon: Scan Code  --- addr: 0x610d cmd: 0xbf40b6ff
+I (33850) samsung_parser: length = 48
+I (35400) samsung_parser: length = 49
+I (35400) aircon: Scan Code  --- addr: 0xb24d cmd: 0x7c0269fe
+I (35500) samsung_parser: length = 50
+I (37140) samsung_parser: length = 1
+I (37160) samsung_parser: length = 1
+I (38190) samsung_parser: length = 49
+I (38190) aircon: Scan Code  --- addr: 0x6485 cmd: 0x7d143efb
+I (38290) samsung_parser: length = 49
+I (39800) samsung_parser: length = 47
+I (39890) samsung_parser: length = 50
+I (41240) samsung_parser: length = 50
+I (41240) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf1036eff
+I (41330) samsung_parser: length = 45
+I (42420) samsung_parser: length = 49
+I (42420) aircon: Scan Code  --- addr: 0xb24d cmd: 0x780769ff
+I (42520) samsung_parser: length = 48
+I (44450) samsung_parser: length = 49
+I (44450) aircon: Scan Code  --- addr: 0xb24d cmd: 0x1f40d3ff
+I (44540) samsung_parser: length = 47
+I (45510) samsung_parser: length = 49
+I (45610) samsung_parser: length = 46
+I (46440) samsung_parser: length = 50
+I (46540) samsung_parser: length = 49
+I (47670) samsung_parser: length = 48
+I (47670) aircon: Scan Code  --- addr: 0xac8d cmd: 0x3e01c8ff
+I (47770) samsung_parser: length = 46
+I (49380) samsung_parser: length = 49
+I (49480) samsung_parser: length = 48
+I (51180) samsung_parser: length = 50
+I (51180) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf807e9f4
+I (51280) samsung_parser: length = 46
+I (51570) samsung_parser: length = 50
+I (51660) samsung_parser: length = 50
+I (55760) samsung_parser: length = 50
+I (55760) aircon: Scan Code  --- addr: 0x6491 cmd: 0xf00f93f8
+I (55850) samsung_parser: length = 49
+I (57710) samsung_parser: length = 50
+I (57710) aircon: Scan Code  --- addr: 0x904d cmd: 0xfd0202fd
+I (57800) samsung_parser: length = 48
+I (60020) samsung_parser: length = 50
+I (60110) samsung_parser: length = 50
+I (61400) samsung_parser: length = 49
+I (61490) samsung_parser: length = 49
+I (63880) samsung_parser: length = 48
+I (63970) samsung_parser: length = 50
+I (65030) samsung_parser: length = 48
+I (65120) samsung_parser: length = 48
+I (67130) samsung_parser: length = 49
+I (67130) aircon: Scan Code  --- addr: 0xb24d cmd: 0x7c0733fe
+I (67220) samsung_parser: length = 49
+I (69140) samsung_parser: length = 47
+I (69230) samsung_parser: length = 49
+I (70390) samsung_parser: length = 49
+I (70390) aircon: Scan Code  --- addr: 0xb24d cmd: 0x7c03e9de
+I (70480) samsung_parser: length = 46
+I (71890) samsung_parser: length = 49
+I (71980) samsung_parser: length = 47
+I (73270) samsung_parser: length = 50
+I (73270) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf807e9fe
+I (73360) samsung_parser: length = 48
+
+I (180650) aircon: Scan Code  --- addr: 0x6491 cmd: 0x9e8a25fb
+I (180740) samsung_parser: length = 48
+I (180740) aircon: Scan Code  --- addr: 0xb24d cmd: 0xac8100fd
+I (185060) samsung_parser: length = 50
+I (185060) aircon: Scan Code  --- addr: 0x6485 cmd: 0xf8067bbd
+I (185150) samsung_parser: length = 47
+I (186810) samsung_parser: length = 49
+I (186810) aircon: Scan Code  --- addr: 0xb24d cmd: 0x6d0292fd
+I (186910) samsung_parser: length = 49
+I (186910) aircon: Scan Code  --- addr: 0xb24d cmd: 0x7e8292fd
+I (188090) samsung_parser: length = 50
+I (188090) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf8073dde
+I (188180) samsung_parser: length = 50
+I (190490) samsung_parser: length = 0
+I (190580) samsung_parser: length = 49
+I (190670) samsung_parser: length = 50
+I (191640) samsung_parser: length = 48
+I (191640) aircon: Scan Code  --- addr: 0xb24c cmd: 0x3e0390f6
+I (191740) samsung_parser: length = 49
+I (193040) samsung_parser: length = 49
+I (193130) samsung_parser: length = 49
+I (196320) samsung_parser: length = 51
+I (196320) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf00e473f
+I (196420) samsung_parser: length = 48
+I (197990) samsung_parser: length = 50
+I (197990) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfd0223ed
+I (198080) samsung_parser: length = 47
+I (199440) samsung_parser: length = 1
+I (200120) samsung_parser: length = 49
+I (200210) samsung_parser: length = 48
+I (201980) samsung_parser: length = 47
+I (202070) samsung_parser: length = 50
+I (202860) samsung_parser: length = 50
+I (202960) samsung_parser: length = 46
+I (203510) samsung_parser: length = 49
+I (203600) samsung_parser: length = 49
+I (204090) samsung_parser: length = 47
+I (204190) samsung_parser: length = 48
+I (204600) samsung_parser: length = 49
+I (204700) samsung_parser: length = 46
+I (205030) samsung_parser: length = 2
+I (205110) samsung_parser: length = 47
+I (205210) samsung_parser: length = 49
+I (205460) samsung_parser: length = 1
+I (205550) samsung_parser: length = 47
+I (205640) samsung_parser: length = 49
+I (206040) samsung_parser: length = 49
+I (206140) samsung_parser: length = 47
+I (206550) samsung_parser: length = 47
+I (206560) samsung_parser: length = 1
+I (206650) samsung_parser: length = 48
+I (207090) samsung_parser: length = 49
+I (207190) samsung_parser: length = 48
+I (208490) samsung_parser: length = 48
+I (208490) aircon: Scan Code  --- addr: 0xb24d cmd: 0x3e816dff
+I (208500) samsung_parser: length = 1
+I (208580) samsung_parser: length = 48
+I (209390) samsung_parser: length = 49
+I (209480) samsung_parser: length = 50
+I (210710) samsung_parser: length = 49
+I (210710) aircon: Scan Code  --- addr: 0xd24d cmd: 0x7e81d97e
+I (210800) samsung_parser: length = 47
+I (211730) samsung_parser: length = 49
+I (211730) aircon: Scan Code  --- addr: 0x592d cmd: 0x7c03b4ff
+I (211820) samsung_parser: length = 49
+I (212670) samsung_parser: length = 50
+I (212770) samsung_parser: length = 49
+I (219130) samsung_parser: length = 49
+I (219130) aircon: Scan Code  --- addr: 0x6498 cmd: 0x7c0e67bf
+I (219220) samsung_parser: length = 52
+I (220030) samsung_parser: length = 49
+I (220030) aircon: Scan Code  --- addr: 0xa24d cmd: 0x6d02dbfd
+
+I (3380) samsung_parser: length = 50
+I (3380) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfd0202fd
+I (3470) samsung_parser: length = 48
+I (26000) samsung_parser: length = 47
+I (26100) samsung_parser: length = 49
+I (28490) samsung_parser: length = 49
+I (28490) aircon: Scan Code  --- addr: 0xb24d cmd: 0x768192fd
+I (28590) samsung_parser: length = 48
+I (53920) samsung_parser: length = 51
+I (53920) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf00ec3b9
+I (54010) samsung_parser: length = 46
+I (62570) samsung_parser: length = 1
+I (71000) samsung_parser: length = 50
+I (71000) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfd0202fd
+I (71090) samsung_parser: length = 50
+I (71090) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfd0366ff
+I (101180) samsung_parser: length = 51
+I (101180) aircon: Scan Code  --- addr: 0xb04d cmd: 0xf00fe3af
+I (101270) samsung_parser: length = 50
+I (101270) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf80721de
+
+I (152660) samsung_parser: length = 48
+I (153910) samsung_parser: length = 50
+I (153910) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfd0202fd
+I (154000) samsung_parser: length = 47
+I (154320) samsung_parser: length = 48
+I (154410) samsung_parser: length = 50
+I (154730) samsung_parser: length = 1
+I (154810) samsung_parser: length = 48
+I (154820) samsung_parser: length = 1
+I (154900) samsung_parser: length = 46
+I (155290) samsung_parser: length = 46
+I (155380) samsung_parser: length = 50
+I (156030) samsung_parser: length = 49
+I (156120) samsung_parser: length = 49
+I (156520) samsung_parser: length = 47
+I (156610) samsung_parser: length = 50
+I (159060) samsung_parser: length = 50
+I (159060) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfd02dbff
+I (159150) samsung_parser: length = 48
+I (159150) aircon: Scan Code  --- addr: 0xb24d cmd: 0x3f436dff
+I (160710) samsung_parser: length = 50
+I (160710) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf80721de
+I (160800) samsung_parser: length = 49
+I (160800) aircon: Scan Code  --- addr: 0x324d cmd: 0x7c03f4ff
+I (162330) samsung_parser: length = 50
+I (162330) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfd00cbfd
+I (162420) samsung_parser: length = 48
+I (162420) aircon: Scan Code  --- addr: 0xb24d cmd: 0xbe025bed
+I (163620) samsung_parser: length = 49
+I (163620) aircon: Scan Code  --- addr: 0xb24d cmd: 0x7c03a5de
+I (163710) samsung_parser: length = 50
+I (165510) samsung_parser: length = 51
+I (165510) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfa0725f5
+I (165600) samsung_parser: length = 50
+I (167260) samsung_parser: length = 51
+I (167350) samsung_parser: length = 50
+I (167360) aircon: Scan Code  --- addr: 0xb24d cmd: 0x7807e9fe
+I (168670) samsung_parser: length = 49
+I (168670) aircon: Scan Code  --- addr: 0xb24d cmd: 0x650292fd
+I (168770) samsung_parser: length = 50
+I (170040) samsung_parser: length = 52
+I (170130) samsung_parser: length = 48
+I (171190) samsung_parser: length = 50
+I (171190) aircon: Scan Code  --- addr: 0xb24d cmd: 0xfd0326fd
+I (171200) samsung_parser: length = 1
+I (171290) samsung_parser: length = 47
+I (172140) samsung_parser: length = 48
+I (172230) samsung_parser: length = 50
+I (172970) samsung_parser: length = 1
+I (173050) samsung_parser: length = 46
+I (173150) samsung_parser: length = 51
+I (174570) samsung_parser: length = 50
+I (174570) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf807e9fe
+I (174660) samsung_parser: length = 49
+I (175740) samsung_parser: length = 50
+I (175740) aircon: Scan Code  --- addr: 0xb24d cmd: 0xf90212fd
+I (175830) samsung_parser: length = 50
+I (176730) samsung_parser: length = 1
