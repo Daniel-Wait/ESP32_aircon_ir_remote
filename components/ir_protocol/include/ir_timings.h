@@ -29,8 +29,7 @@ extern "C" {
 #define SAMSUNG_PAYLOAD_ZERO_HIGH_US    (560)
 #define SAMSUNG_PAYLOAD_ZERO_LOW_US     (560)
 #define SAMSUNG_ENDING_CODE_HIGH_US     (560)
-#define SAMSUNG_REPEAT_CODE_HIGH_US    (4500)
-#define SAMSUNG_REPEAT_CODE_LOW_US     (4500)
+#define SAMSUNG_ENDING_CODE_LOW_US      (5500)
 
 #ifdef __cplusplus
 }
