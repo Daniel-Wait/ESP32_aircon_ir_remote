@@ -178,7 +178,7 @@ ir_builder_t* ir_builder_rmt_new_samsung(const ir_builder_config_t *config)
     samsung_builder->payload_logic1_high_ticks = (uint32_t)(ratio * SAMSUNG_PAYLOAD_ONE_HIGH_US);
     samsung_builder->payload_logic1_low_ticks = (uint32_t)(ratio * SAMSUNG_PAYLOAD_ONE_LOW_US);
     samsung_builder->ending_code_high_ticks = (uint32_t)(ratio * SAMSUNG_ENDING_CODE_HIGH_US);
-    samsung_builder->ending_code_low_ticks = 0x7FFF; // duration fields of rmt_item32_t only take 15 bits (0x7FFF is max)
+    samsung_builder->ending_code_low_ticks = (uint32_t)(ratio * 5500);; // duration fields of rmt_item32_t only take 15 bits (0x7FFF is max)
     samsung_builder->parent.make_head = samsung_builder_make_head;
     samsung_builder->parent.make_logic0 = samsung_builder_make_logic0;
     samsung_builder->parent.make_logic1 = samsung_builder_make_logic1;
@@ -186,7 +186,7 @@ ir_builder_t* ir_builder_rmt_new_samsung(const ir_builder_config_t *config)
     samsung_builder->parent.build_frame = samsung_build_frame;
     samsung_builder->parent.get_result = samsung_builder_get_result;
     samsung_builder->parent.del = samsung_builder_del;
-    samsung_builder->parent.repeat_period_ms = 108;
+    samsung_builder->parent.repeat_period_ms = 5;
     return &samsung_builder->parent;
 err:
     return ret;

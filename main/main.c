@@ -20,7 +20,7 @@
 
 static const char *TAG = "aircon";
 
-static rmt_channel_t tx_rmt_chan = RMT_CHANNEL_0;
+static const rmt_channel_t tx_rmt_chan = RMT_CHANNEL_0;
 
 SemaphoreHandle_t xSemaphore;
 
@@ -50,7 +50,6 @@ static void ir_tx_task(void *arg)
     rmt_driver_install(tx_rmt_chan, 0, 0);
 
     __unused rmt_tx_end_callback_t previous = rmt_register_tx_end_callback(localTxEndCallback, (void *)&addr);
-    
 
     ir_builder_config_t ir_builder_config = IR_BUILDER_DEFAULT_CONFIG((ir_dev_t)tx_rmt_chan);
     ir_builder_config.flags |= IR_TOOLS_FLAGS_PROTO_EXT; // Using extended IR protocols (both NEC and RC5 have extended version)
@@ -66,7 +65,6 @@ static void ir_tx_task(void *arg)
         ESP_ERROR_CHECK(ir_builder->get_result(ir_builder, &items, &length));
         //To send data according to the waveform items.
         rmt_write_items(tx_rmt_chan, items, length, true);
-        vTaskDelay(pdMS_TO_TICKS(ir_builder->repeat_period_ms));
         rmt_write_items(tx_rmt_chan, items, length, false);
     }
     ir_builder->del(ir_builder);
