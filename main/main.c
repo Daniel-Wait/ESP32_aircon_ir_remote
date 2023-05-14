@@ -5,6 +5,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/timers.h"
 #include "freertos/semphr.h"
 
 #include "esp_system.h"
@@ -15,6 +16,7 @@
 
 #include "driver/rmt.h"
 #include "driver/gpio.h"
+#include "driver/timer.h"
 
 #include "ir_tools.h"
 
@@ -67,6 +69,14 @@ static void ir_tx_task(void *arg)
         ESP_ERROR_CHECK(ir_builder->get_result(ir_builder, &items, &length));
         //To send data according to the waveform items.
         rmt_write_items(tx_rmt_chan, items, length, true);
+#ifdef HACK_DELAY_5500US
+        // Plan here was to delay for requisite 5500us for repeat send
+        // Rather opted to make the ending code high ticks = 5500us
+        vTaskDelay(pdMS_TO_TICKS(5));
+        taskDISABLE_INTERRUPTS();
+        ets_delay_us(500);
+        taskENABLE_INTERRUPTS();
+#endif
         rmt_write_items(tx_rmt_chan, items, length, false);
 
         if (0) {break;}

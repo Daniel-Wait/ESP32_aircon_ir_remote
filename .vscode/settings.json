@@ -11,6 +11,8 @@
         "*.inc": "c",
         "ratio": "c",
         "*.tcc": "c",
+        "timer.h": "c",
+        "timers.h": "c",
         "freertos.h": "c"
     },
     "idf.adapterTargetName": "esp32",
