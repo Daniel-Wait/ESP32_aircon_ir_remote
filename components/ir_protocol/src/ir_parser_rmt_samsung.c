@@ -71,13 +71,13 @@ static bool samsung_parse_head(samsung_parser_t *samsung_parser)
     bool margin = samsung_check_in_range(item.duration0, samsung_parser->leading_code_high_ticks, samsung_parser->margin_ticks);
     if (!margin)
     {
-        printf("0 : {%u, %u}\n", item.duration0, samsung_parser->leading_code_high_ticks);
+        printf("0 : {%u, %lu}\n", item.duration0, samsung_parser->leading_code_high_ticks);
         return false;
     }
     margin &= samsung_check_in_range(item.duration1, samsung_parser->leading_code_low_ticks, samsung_parser->margin_ticks);
     if (!margin)
     {
-        printf("1 : {%u, %u}\n", item.duration1, samsung_parser->leading_code_low_ticks);
+        printf("1 : {%u, %lu}\n", item.duration1, samsung_parser->leading_code_low_ticks);
         return false;
     }
     bool ret = level && margin;
@@ -134,13 +134,13 @@ static bool samsung_parse_ending_frame(samsung_parser_t *samsung_parser)
     bool margin = samsung_check_in_range(item.duration0, samsung_parser->ending_code_high_ticks, samsung_parser->margin_ticks);
     if (!margin)
     {
-        printf("0 : {%u, %u}\n", item.duration0, samsung_parser->ending_code_high_ticks);
+        printf("0 : {%u, %lu}\n", item.duration0, samsung_parser->ending_code_high_ticks);
         return false;
     }
     margin &= (item.duration1 < samsung_parser->margin_ticks);
     if (!margin)
     {
-        printf("1 : {%u, %u}\n", item.duration1, samsung_parser->ending_code_low_ticks);
+        printf("1 : {%u, %lu}\n", item.duration1, samsung_parser->ending_code_low_ticks);
         return false;
     }
     return  level && margin;
@@ -151,7 +151,7 @@ static esp_err_t samsung_parser_input(ir_parser_t *parser, void *raw_data, uint3
     esp_err_t ret = ESP_OK;
     samsung_parser_t *samsung_parser = __containerof(parser, samsung_parser_t, parent);
     SAMSUNG_CHECK(raw_data, "input data can't be null", err, ESP_ERR_INVALID_ARG);
-    ESP_LOGI("samsung_parser", "length = %u", length);
+    ESP_LOGI("samsung_parser", "length = %lu", length);
     // Data Frame costs 34 items and Repeat Frame costs 2 items
     if (length != 50)
     {

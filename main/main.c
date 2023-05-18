@@ -65,7 +65,7 @@ static void ir_tx_task(void *arg)
     while (1) {
         uint32_t cmd = arr_cmd[cmd_num];
         vTaskDelay(pdMS_TO_TICKS(3000));
-        ESP_LOGI(TAG, "Send command 0x%x to address 0x%x", cmd, addr);
+        ESP_LOGI(TAG, "Send command 0x%lx to address 0x%lx", cmd, addr);
         vTaskDelay(pdMS_TO_TICKS(500));
         // Send new key code
         ESP_ERROR_CHECK(ir_builder->build_frame(ir_builder, addr, cmd));
@@ -128,7 +128,7 @@ static void ir_rx_task(void *arg)
                 // xSemaphoreGive(xSemaphoreRmtRx);
                 if (ir_parser->get_scan_code(ir_parser, &addr, &cmd, &repeat) == ESP_OK)
                 {
-                    ESP_LOGI(TAG, "Scan Code %s --- addr: 0x%x cmd: 0x%x", repeat ? "(repeat)" : "", addr, cmd);
+                    ESP_LOGI(TAG, "Scan Code %s --- addr: 0x%lx cmd: 0x%lx", repeat ? "(repeat)" : "", addr, cmd);
                 }
             }
             //after parsing the data, return spaces to ringbuffer.
