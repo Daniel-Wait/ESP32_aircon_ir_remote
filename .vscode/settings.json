@@ -13,7 +13,8 @@
         "*.tcc": "c",
         "timer.h": "c",
         "timers.h": "c",
-        "freertos.h": "c"
+        "freertos.h": "c",
+        "stdlib.h": "c"
     },
     "idf.adapterTargetName": "esp32",
     "idf.openOcdConfigs": [
