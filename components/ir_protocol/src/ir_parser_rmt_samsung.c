@@ -65,19 +65,19 @@ static bool samsung_parse_head(samsung_parser_t *samsung_parser)
     bool level = (item.level0 == samsung_parser->inverse) && (item.level1 != samsung_parser->inverse);
     if (!level)
     {
-        printf("level : {%u, %u}\n", item.level0, item.level1);
+        ESP_LOGW("parser error", "level : {%u, %u}\n", item.level0, item.level1);
         return false;
     }
     bool margin = samsung_check_in_range(item.duration0, samsung_parser->leading_code_high_ticks, samsung_parser->margin_ticks);
     if (!margin)
     {
-        printf("0 : {%u, %lu}\n", item.duration0, samsung_parser->leading_code_high_ticks);
+        ESP_LOGW("parser error", "0 : {%u, %lu}\n", item.duration0, samsung_parser->leading_code_high_ticks);
         return false;
     }
     margin &= samsung_check_in_range(item.duration1, samsung_parser->leading_code_low_ticks, samsung_parser->margin_ticks);
     if (!margin)
     {
-        printf("1 : {%u, %lu}\n", item.duration1, samsung_parser->leading_code_low_ticks);
+        ESP_LOGW("parser error", "1 : {%u, %lu}\n", item.duration1, samsung_parser->leading_code_low_ticks);
         return false;
     }
     bool ret = level && margin;
@@ -128,19 +128,19 @@ static bool samsung_parse_ending_frame(samsung_parser_t *samsung_parser)
     bool level = (item.level0 == samsung_parser->inverse) && (item.level1 != samsung_parser->inverse);
     if (!level)
     {
-        printf("level : {%u, %u}\n", item.level0, item.level1);
+        ESP_LOGW("parser error", "level : {%u, %u}\n", item.level0, item.level1);
         return false;
     }
     bool margin = samsung_check_in_range(item.duration0, samsung_parser->ending_code_high_ticks, samsung_parser->margin_ticks);
     if (!margin)
     {
-        printf("0 : {%u, %lu}\n", item.duration0, samsung_parser->ending_code_high_ticks);
+        ESP_LOGW("parser error", "0 : {%u, %lu}\n", item.duration0, samsung_parser->ending_code_high_ticks);
         return false;
     }
     margin &= (item.duration1 < samsung_parser->margin_ticks);
     if (!margin)
     {
-        printf("1 : {%u, %lu}\n", item.duration1, samsung_parser->ending_code_low_ticks);
+        ESP_LOGW("parser error", "1 : {%u, %lu}\n", item.duration1, samsung_parser->ending_code_low_ticks);
         return false;
     }
     return  level && margin;
@@ -160,7 +160,7 @@ static esp_err_t samsung_parser_input(ir_parser_t *parser, void *raw_data, uint3
     }
     samsung_parser->buffer = raw_data;
     samsung_parser->buffer_length = length;
-    // printf("length : %u \t buffersize : %u\n", length, (uint32_t)(sizeof(samsung_parser->buffer)/sizeof(samsung_parser->buffer[0])) );
+    // ESP_LOGI("parser input", "length : %u \t buffersize : %u\n", length, (uint32_t)(sizeof(samsung_parser->buffer)/sizeof(samsung_parser->buffer[0])) );
     return ret;
 err:
     return ret;
