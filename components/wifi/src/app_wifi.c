@@ -7,7 +7,7 @@
 // #include "lwip/lwip_napt.h"
 
 #include "app_wifi.h"
-#include "main.h"
+#include "ac_common.h"
 
 // static const char* TAG = "wifi app";
 static const char* TAG_STA = "wifi STA";
@@ -106,5 +106,5 @@ static void app_wifi_task(void *arg)
 
 void app_wifi_tasks_init(void)
 {
-    xTaskCreatePinnedToCore(app_wifi_task, "app_wifi_task", 4096, NULL, TASK_WIFI, NULL, 0);
+    xTaskCreate(app_wifi_task, "app_wifi_task", 4096, NULL, TASK_WIFI, NULL);
 }

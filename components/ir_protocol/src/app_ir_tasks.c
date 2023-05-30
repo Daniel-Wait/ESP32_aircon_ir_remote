@@ -17,7 +17,7 @@
 
 #include "ir_tools.h"
 
-#include "main.h"
+#include "ac_common.h"
 
 static const rmt_channel_t tx_rmt_chan = RMT_CHANNEL_0;
 static const rmt_channel_t rx_rmt_chan = RMT_CHANNEL_1;
@@ -28,7 +28,7 @@ SemaphoreHandle_t xSemaphoreRmtRx;
 static const char *TAG = "aircon_ir";
 
 
-static void localTxEndCallback(rmt_channel_t channel, void *arg)
+void localTxEndCallback(rmt_channel_t channel, void *arg)
 {
     static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     ESP_LOGI(TAG, "tx");
@@ -39,7 +39,7 @@ static void localTxEndCallback(rmt_channel_t channel, void *arg)
  * @brief RMT Transmit Task
  *
  */
-static void ir_tx_task(void *arg)
+void ir_tx_task(void *arg)
 {
     uint32_t addr = 0xB24D;
     // uint32_t cmd = (0xBF40 << 16) | 0x00FF;
@@ -91,7 +91,7 @@ static void ir_tx_task(void *arg)
 }
 
 
-static void ir_rx_task(void *arg)
+void ir_rx_task(void *arg)
 {
     uint32_t addr = 0;
     uint32_t cmd = 0;
@@ -140,7 +140,7 @@ static void ir_rx_task(void *arg)
     vTaskDelete(NULL);
 }
 
-static void debug_print_task(void *arg)
+void debug_print_task(void *arg)
 {
     while (1)
     {
