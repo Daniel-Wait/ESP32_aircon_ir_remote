@@ -53,7 +53,7 @@ void ir_tx_task(void *arg)
     rmt_config(&rmt_tx_config);
     rmt_driver_install(tx_rmt_chan, 0, 0);
 
-    __unused rmt_tx_end_callback_t previous = rmt_register_tx_end_callback(localTxEndCallback, (void *)&addr);
+    //__unused rmt_tx_end_callback_t previous = rmt_register_tx_end_callback(localTxEndCallback, (void *)&addr);
 
     ir_builder_config_t ir_builder_config = IR_BUILDER_DEFAULT_CONFIG((ir_dev_t)tx_rmt_chan);
     ir_builder_config.flags |= IR_TOOLS_FLAGS_PROTO_EXT; // Using extended IR protocols (both NEC and RC5 have extended version)
@@ -63,9 +63,8 @@ void ir_tx_task(void *arg)
     uint8_t cmd_num = 0;
     while (1) {
         uint32_t cmd = arr_cmd[cmd_num];
-        vTaskDelay(pdMS_TO_TICKS(3000));
         ESP_LOGI(TAG, "Send command 0x%x to address 0x%x", cmd, addr);
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(3500));
         // Send new key code
         ESP_ERROR_CHECK(ir_builder->build_frame(ir_builder, addr, cmd));
         ESP_ERROR_CHECK(ir_builder->get_result(ir_builder, &items, &length));
@@ -82,6 +81,9 @@ void ir_tx_task(void *arg)
         ESP_ERROR_CHECK(rmt_write_items(tx_rmt_chan, items, length, false));
         cmd_num += 1;
         cmd_num %= 2;
+
+        UBaseType_t uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+        ESP_LOGI("tx-high-water-mark", "%d", uxHighWaterMark);
 
         if (0) {break;}
     }
@@ -161,6 +163,6 @@ void app_ir_tasks_init(void)
     xSemaphoreRmtTx = xSemaphoreCreateBinary();
     xSemaphoreRmtRx = xSemaphoreCreateBinary();
     xTaskCreate(debug_print_task, "debug_print_task", 2048, NULL, TASK_DEBUG_PRINT, NULL);
-    xTaskCreate(ir_tx_task, "ir_tx_task", 2048, NULL, TASK_IR_TX, NULL);
-    xTaskCreate(ir_rx_task, "ir_rx_task", 2048, NULL, TASK_IR_RX, NULL);
+    xTaskCreate(ir_tx_task, "ir_tx_task", 1152, NULL, TASK_IR_TX, NULL);
+    // xTaskCreate(ir_rx_task, "ir_rx_task", 2048, NULL, TASK_IR_RX, NULL);
 }
