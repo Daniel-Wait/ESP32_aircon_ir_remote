@@ -4,6 +4,8 @@
 #include "freertos/task.h"
 #include "freertos/timers.h"
 #include "freertos/semphr.h"
+#include "freertos/queue.h"
+
 
 #include "esp_system.h"
 #include "esp_spi_flash.h"
@@ -22,8 +24,8 @@
 static const rmt_channel_t tx_rmt_chan = RMT_CHANNEL_0;
 static const rmt_channel_t rx_rmt_chan = RMT_CHANNEL_1;
 
-SemaphoreHandle_t xSemaphoreRmtTx;
-SemaphoreHandle_t xSemaphoreRmtRx;
+SemaphoreHandle_t xSemaphoreRmtTx = NULL;
+SemaphoreHandle_t xSemaphoreRmtRx = NULL;
 
 static const char *TAG = "aircon_ir";
 
@@ -31,7 +33,6 @@ static const char *TAG = "aircon_ir";
 void localTxEndCallback(rmt_channel_t channel, void *arg)
 {
     static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    ESP_LOGI(TAG, "tx");
     xSemaphoreGiveFromISR(xSemaphoreRmtTx, &xHigherPriorityTaskWoken);
 }
 
@@ -41,6 +42,8 @@ void localTxEndCallback(rmt_channel_t channel, void *arg)
  */
 void ir_tx_task(void *arg)
 {
+    xSemaphoreRmtTx = xSemaphoreCreateBinary();
+
     uint32_t addr = 0xB24D;
     // uint32_t cmd = (0xBF40 << 16) | 0x00FF;
     uint32_t arr_cmd[2] = {0xdd2207f8, 0xf80721de};
@@ -53,15 +56,15 @@ void ir_tx_task(void *arg)
     rmt_config(&rmt_tx_config);
     rmt_driver_install(tx_rmt_chan, 0, 0);
 
-    //__unused rmt_tx_end_callback_t previous = rmt_register_tx_end_callback(localTxEndCallback, (void *)&addr);
+    __unused rmt_tx_end_callback_t previous = rmt_register_tx_end_callback(localTxEndCallback, (void *)&addr);
 
     ir_builder_config_t ir_builder_config = IR_BUILDER_DEFAULT_CONFIG((ir_dev_t)tx_rmt_chan);
     ir_builder_config.flags |= IR_TOOLS_FLAGS_PROTO_EXT; // Using extended IR protocols (both NEC and RC5 have extended version)
 
     ir_builder_t* ir_builder = ir_builder_rmt_new_samsung(&ir_builder_config);
-
     uint8_t cmd_num = 0;
-    while (1) {
+    while (1) 
+    {
         uint32_t cmd = arr_cmd[cmd_num];
         ESP_LOGI(TAG, "Send command 0x%x to address 0x%x", cmd, addr);
         vTaskDelay(pdMS_TO_TICKS(3500));
@@ -78,12 +81,14 @@ void ir_tx_task(void *arg)
         ets_delay_us(500);
         taskENABLE_INTERRUPTS();
 #endif
-        ESP_ERROR_CHECK(rmt_write_items(tx_rmt_chan, items, length, false));
+        // ESP_ERROR_CHECK(rmt_write_items(tx_rmt_chan, items, length, true));
         cmd_num += 1;
         cmd_num %= 2;
-
+    
+    #if 0
         UBaseType_t uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
         ESP_LOGI("tx-high-water-mark", "%d", uxHighWaterMark);
+    #endif
 
         if (0) {break;}
     }
@@ -95,6 +100,8 @@ void ir_tx_task(void *arg)
 
 void ir_rx_task(void *arg)
 {
+    xSemaphoreRmtRx = xSemaphoreCreateBinary();
+
     uint32_t addr = 0;
     uint32_t cmd = 0;
     size_t length = 0;
@@ -144,25 +151,37 @@ void ir_rx_task(void *arg)
 
 void debug_print_task(void *arg)
 {
+    UBaseType_t uxHighWaterMark;
     while (1)
-    {
-        if (xSemaphoreTake(xSemaphoreRmtTx, portMAX_DELAY) == pdTRUE)
+    {   
+        if (xSemaphoreRmtTx != NULL)
         {
-            ESP_LOGI(TAG, "rmt_tx_cmplt");
+            // ESP_LOGI(TAG, "sem : %u", uxQueueMessagesWaiting(xSemaphoreRmtTx));
+            if (xSemaphoreTake(xSemaphoreRmtTx, portMAX_DELAY) == pdTRUE)
+            {
+                ESP_LOGI(TAG, "rmt_tx_cmplt");
+                goto log_high_water;
+            }
         }
-        if (xSemaphoreTake(xSemaphoreRmtRx, portMAX_DELAY) == pdTRUE)
+        if (xSemaphoreRmtRx != NULL)
         {
-            ESP_LOGI(TAG, "rmt_rx_line_active");
+            if (xSemaphoreTake(xSemaphoreRmtRx, portMAX_DELAY) == pdTRUE)
+            {
+                ESP_LOGI(TAG, "rmt_rx_line_active");
+                goto log_high_water;
+            }
         }
+        continue;
+log_high_water:
+        uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+        ESP_LOGI("dbg-high-water-mark", "%d", uxHighWaterMark);
     }
     vTaskDelete(NULL);
 }
 
 void app_ir_tasks_init(void)
 {
-    xSemaphoreRmtTx = xSemaphoreCreateBinary();
-    xSemaphoreRmtRx = xSemaphoreCreateBinary();
-    xTaskCreate(debug_print_task, "debug_print_task", 2048, NULL, TASK_DEBUG_PRINT, NULL);
-    xTaskCreate(ir_tx_task, "ir_tx_task", 1152, NULL, TASK_IR_TX, NULL);
+    xTaskCreatePinnedToCore(ir_tx_task, "ir_tx_task", 2048, NULL, TASK_IR_TX, NULL, 1);
     // xTaskCreate(ir_rx_task, "ir_rx_task", 2048, NULL, TASK_IR_RX, NULL);
+    xTaskCreatePinnedToCore(debug_print_task, "debug_print_task", 1664, NULL, TASK_DEBUG_PRINT, NULL, 1);
 }

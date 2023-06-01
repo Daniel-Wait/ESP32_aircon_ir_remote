@@ -31,7 +31,10 @@
         "xloctime": "c",
         "esp_event.h": "c",
         "main.h": "c",
-        "esp_log.h": "c"
+        "esp_log.h": "c",
+        "common.h": "c",
+        "ac_common.h": "c",
+        "queue.h": "c"
     },
     "idf.adapterTargetName": "esp32",
     "idf.openOcdConfigs": [
